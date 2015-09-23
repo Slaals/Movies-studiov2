@@ -26,11 +26,11 @@ $(document).ready(function() {
 	$( '#movies-page' ).val( nbMoviesPage );
 
 	$( '#page-left' ).on( 'click', function() {
-		selectPage( currentSelected.prev() );
+		selectPage( $( '#pages .page-link.selected' ).prev() );
 	});
 
 	$( '#page-right' ).on( 'click', function() {
-		selectPage( currentSelected.next() );
+		selectPage( $( '#pages .page-link.selected' ).next() );
 	});
 });
 
