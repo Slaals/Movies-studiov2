@@ -1,0 +1,9 @@
+.cover {
+	width: 275px;
+	height: auto;
+}
+
+#pages li .selected {
+	background-color: black;
+	color: white;
+}
