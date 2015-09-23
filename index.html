@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Home</title>
+
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet" />
+    <link href="css/style.css" rel="stylesheet" />
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="./js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="./js/function.js" type="text/javascript"></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="form-inline">
+        <div class="form-group">
+          <label for="movies-page">Movies by page </label>
+          <input type="text" class="form-control" id="movies-page" />
+        </div>
+      </div>
+    </div>
+    <div class="container" id="movies-view">
+      <div class="movie">
+        <img src="https://cdn-2.streamnation.com/01/64/81/6481ea5ce2d47c0cece578ac6b5d7ccc72b41e56_low_1.jpg?st=rxiASY8k4qY-BLQ4aU1Lyw\u0026e=4102473600\u0026f=hls">
+        <h2>Exodus: Gods and Kings</h2>
+      </div>
+      <div class="movie">
+        <img src="https://cdn-2.streamnation.com/36/1a/58/1a5888975b61ef5fe89e5a643708a0930212b345_low_1.jpg?st=HovBT6CFZZhfUmQ_pK8U8w\u0026e=4102473600\u0026f=hls">
+        <h2>Lone Survivors</h2>
+      </div>
+    </div>
+    <div class="container">
+      <input type="button" value="<" id="page-left" />
+      <span>Page 1</span>
+      <input type="button" value=">" id="page-right" />
+    </div>
+  </body>
+</html>
