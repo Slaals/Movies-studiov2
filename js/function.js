@@ -16,26 +16,29 @@ $(document).ready(function() {
 
 		$( '#pages' ).children().first().addClass( 'selected' );
 
+		$( '#pages li' ).on( 'click', function() {
+			selectPage( $(this) );
+		});
+
 		updateMoviesView( 0 );
 	});
 
 	$( '#movies-page' ).val( nbMoviesPage );
 
 	$( '#page-left' ).on( 'click', function() {
-		currentSelected = $( '#pages .page-link.selected' );
-
-		selectPage( currentSelected, currentSelected.prev() )
+		selectPage( currentSelected.prev() );
 	});
 
 	$( '#page-right' ).on( 'click', function() {
-		currentSelected = $( '#pages .page-link.selected' );
-
-		selectPage( currentSelected, currentSelected.next() )
+		selectPage( currentSelected.next() );
 	});
 });
 
-function selectPage( current, newPage ) {
+function selectPage( newPage ) {
+	index = 0;
 	pages = $( '#pages' ).children();
+
+	current = $( '#pages .page-link.selected' );
 
 	pages.removeClass( 'selected' );
 
@@ -44,20 +47,30 @@ function selectPage( current, newPage ) {
 			pages.first().addClass( 'selected' );
 		} else {
 			pages.last().addClass( 'selected' );
+			index = pages.length - 1;
 		}
 	} else {
 		newPage.addClass( 'selected' );
+		index = newPage.index();
 	}
 
-	updateMoviesView( newPage.index() );
+	updateMoviesView( index );
 }
 
 function updateMoviesView( index ) {
 	container = $( '#movies-view' );
 
+	from = nbMoviesPage * index;
+
+	to = from + nbMoviesPage;
+
+	if( to > movies.length ) {
+		to = movies.length;
+	}
+
 	container.empty();
 
-	for( i = index; i < nbMoviesPage; i++ ) {
+	for( i = from; i < to; i++ ) {
 		container.append( '<div class="movie"></div>' );
 
 		movie = container.children().last();
