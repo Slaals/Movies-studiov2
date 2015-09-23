@@ -75,7 +75,7 @@ function definePagesLink( index ) {
 	pages.empty();
 
 	for( i = 1; i <= getNbPagesBySplit(); i++ ) {
-		$( '#pages' ).append( '<li class="page-link"><a>' + ( i + ( PAGES_BY_SPLIT * currentSplit ) ) + '</a></li>' );
+		pages.append( '<li class="page-link"><a>' + ( i + ( PAGES_BY_SPLIT * currentSplit ) ) + '</a></li>' );
 	}
 
 	selectPage( pages.children().eq( index ) );
@@ -86,8 +86,6 @@ function definePagesLink( index ) {
 }
 
 function updateSplit( ) {
-	var nbPagesBySplit = getNbPagesBySplit();
-
 	$( '.page-split' ).addClass( 'hidden' );
 
 	if( getMaxSplit() > 0 ) {
@@ -122,7 +120,6 @@ function getMaxSplit( ) {
 
 function selectPage( newPage ) {
 	var pages = $( '#pages' ).children();
-	var current = $( '#pages .page-link.selected' );
 
 	updateSplit();
 
@@ -154,7 +151,7 @@ function updateMoviesView( index ) {
 
 	container.empty();
 
-	// Avoid array offset in for loop below
+	// Avoid array offset## in for loop below
 	if( to > movies.length ) {
 		to -= to - movies.length;
 	}
