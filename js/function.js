@@ -1,11 +1,20 @@
-var resources = "https://dev-api.streamnation.com/api/v1/movies?with_facets=false&page=1&sort_by=new_content&order=desc&watched=false&currently_playing_first=true&per_page=10&cover=low&fields=[%22name%22%2c%22cover%22]&x_api_version=2.0&auth_token=ap84WKgZ5rgy8Dmkamwe";
+const RES = "https://dev-api.streamnation.com/api/v1/movies?with_facets=false&page=1&sort_by=new_content&order=desc&watched=false&currently_playing_first=true&per_page=10&cover=low&fields=[%22name%22%2c%22cover%22]&x_api_version=2.0&auth_token=ap84WKgZ5rgy8Dmkamwe";
+
+// Limit the nb of pages shown in the nav
+const PAGES_BY_SPLIT = 5;
+
+// Nb of movies by page
 var nbMoviesPage = 1;
+
+// Current pagination split
+var currentSplit = 0;
 
 var movies = [];
 
 $( document ).ready( function() {
 	
-	$.getJSON( resources, function( data ) {
+	// Get data and create fill the page nav
+	$.getJSON( RES, function( data ) {
 		movies = data.movies;
 
 		definePagesLink( 0 );
@@ -13,84 +22,122 @@ $( document ).ready( function() {
 
 	$( '#movies-page' ).val( nbMoviesPage );
 
-	$( '#page-left' ).on( 'click', function() {
+	$( '#page-prev' ).on( 'click', function() {
 		selectPage( $( '#pages .page-link.selected' ).prev() );
 	});
 
-	$( '#page-right' ).on( 'click', function() {
+	$( '#page-next' ).on( 'click', function() {
 		selectPage( $( '#pages .page-link.selected' ).next() );
+	});
+
+	$( '#page-split-left' ).on( 'click', function() {
+		currentSplit -= 1;
+		definePagesLink( 0 );
+	});
+
+	$( '#page-split-right' ).on( 'click', function() {
+		currentSplit += 1;
+		definePagesLink( 0 );
 	});
 
 	$( '#movies-page' ).on( 'keyup', function() {
 		var inputVal = $( this ).val();
 
+		// If it's not a digit
 		if( ( /^\d+$/.test( inputVal ) === false ) || ( inputVal <= 0 ) ) {
 			// Alert (flash bag)
 		} else {
-			var index = $( '#pages .page-link.selected' ).index();
-
 			nbMoviesPage = parseInt( inputVal );
 
-			definePagesLink( index );
+			currentSplit = 0;
 
-			updateMoviesView( index );
+			definePagesLink( 0 );
 		}
 	});
 });
 
 function definePagesLink( index ) {
 	var pages = $( '#pages' );
-	var nbPages = Math.ceil( movies.length / nbMoviesPage );
 
 	pages.empty();
 
-	for( i = 1; i <= nbPages; i++ ) {
-		$( '#pages' ).append( '<li class="page-link"><a>' + i + '</a></li>' );
+	for( i = 1; i <= getNbPagesBySplit(); i++ ) {
+		$( '#pages' ).append( '<li class="page-link"><a>' + ( i + ( PAGES_BY_SPLIT * currentSplit ) ) + '</a></li>' );
 	}
 
-	if( pages.children().index( index ) < 0 ) {
-		selectPage( pages.children().first() );
-	} else {
-		selectPage( pages.children().eq( index ) );
-	}
+	selectPage( pages.children().eq( index ) );
 
 	$( '#pages li' ).on( 'click', function() {
 		selectPage( $(this) );
 	});
 }
 
+function updateSplit( ) {
+	var nbPagesBySplit = getNbPagesBySplit();
+
+	$( '.page-split' ).addClass( 'hidden' );
+
+	if( getMaxSplit() > 0 ) {
+		if( ( currentSplit > 0 ) ) {
+			$( '#page-split-left' ).removeClass( 'hidden' );
+		} else if( currentSplit < getMaxSplit() - 1 ) {
+			$( '#page-split-right' ).removeClass( 'hidden' );
+		}
+	}
+}
+
+function getNbPagesBySplit( ) {
+	var nbPages;
+	var pagesRemain = getNbPages() % PAGES_BY_SPLIT;
+
+	if( pagesRemain > 0 ) {
+		nbPages = pagesRemain; 
+	} else {
+		nbPages = PAGES_BY_SPLIT;
+	}
+
+	return nbPages;
+}
+
+function getNbPages( ) {
+	return Math.ceil( movies.length / nbMoviesPage );
+}
+
+function getMaxSplit( ) {
+	return Math.ceil( getNbPages() / PAGES_BY_SPLIT );
+}
+
 function selectPage( newPage ) {
-	var index = 0;
 	var pages = $( '#pages' ).children();
 	var current = $( '#pages .page-link.selected' );
 
+	updateSplit();
+
+	if( getNbPages() == 1 ) {
+		$( '.nav-arrow' ).addClass( 'hidden' );
+	} else {
+		$( '.nav-arrow' ).removeClass( 'hidden' );
+		if( newPage.index() == 0 ) {
+			$( '#page-prev' ).addClass( 'hidden' );
+		} else if( newPage.index() == pages.last().index() ) {
+			$( '#page-next' ).addClass( 'hidden' );
+		} 
+	}
+
 	pages.removeClass( 'selected' );
 
-	if( newPage.index() <= -1 ) {
-		if( current.index() + 1 == pages.length ) {
-			pages.first().addClass( 'selected' );
-		} else {
-			pages.last().addClass( 'selected' );
-			index = pages.length - 1;
-		}
-	} else {
-		newPage.addClass( 'selected' );
-		index = newPage.index();
-	}
+	newPage.addClass( 'selected' );
 
-	updateMoviesView( index );
+	updateMoviesView( newPage.index() );
 }
 
+/*
+ * Display the movie(s)
+ */
 function updateMoviesView( index ) {
 	var container = $( '#movies-view' );
-	var from = nbMoviesPage * index;
-	var to = from + nbMoviesPage;
-
-	alert("from : " + from + " - to : " + to );
-
-	if( to > movies.length ) {
-		to = movies.length;
-	}
+	var from = index * nbMoviesPage + ( PAGES_BY_SPLIT * currentSplit ); // From index 
+	var to = from + nbMoviesPage; // To index
 
 	container.empty();
 
