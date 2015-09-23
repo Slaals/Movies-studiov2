@@ -11,6 +11,21 @@ var currentSplit = 0;
 
 var movies = [];
 
+/*
+ * <div class="movie">
+ *  	<img></img>
+ * 		<div class="title">
+ * 			<p></p>
+ * 		</div>
+ * </div>
+ */
+var transform = { tag:'div', class:'movie', children:[
+	{ tag:'img', class:'cover', src:'${cover}'},
+	{ tag:'div', class:'title', children:[
+		{ tag:'p', html:'${name}' } 
+	] }
+] };
+
 $( document ).ready( function() {
 	
 	// Get data and create fill the page nav
@@ -44,9 +59,7 @@ $( document ).ready( function() {
 		var inputVal = $( this ).val();
 
 		// If it's not a digit
-		if( ( /^\d+$/.test( inputVal ) === false ) || ( inputVal <= 0 ) ) {
-			// Alert (flash bag)
-		} else {
+		if( ( /^\d+$/.test( inputVal ) === true ) && ( inputVal > 0 ) ) {
 			nbMoviesPage = parseInt( inputVal );
 
 			currentSplit = 0;
@@ -141,12 +154,12 @@ function updateMoviesView( index ) {
 
 	container.empty();
 
+	// Avoid array often in for loop below
+	if( to > movies.length ) {
+		to -= ( movies.length - from ) + 1;
+	}
+
 	for( i = from; i < to; i++ ) {
-		container.append( '<div class="movie"></div>' );
-
-		movie = container.children().last();
-
-		movie.append( '<img class="cover" src="' + movies[i].cover + '"></img>' );
-		movie.append( '<h3>' + movies[i].name + '</h3>');
+		container.append( json2html.transform( movies[i], transform ) );
 	}
 }

@@ -1,3 +1,10 @@
+body,
+html {
+	height: 100%;
+	width: 100%;
+	background-color: #131C26;
+}
+
 a,
 a:hover {
 	text-decoration: none;
@@ -5,25 +12,81 @@ a:hover {
 	cursor: pointer;
 }
 
+#header {
+	background-color: #233547;
+	max-height: auto;
+	height: 100px;
+	color: white;
+	padding: 30px;
+}
+
+.nav-arrow,
+.page-split {
+	font-size: 1.5em;
+}
+
+#movies-view {
+	padding-top: 30px;
+	padding-bottom: 30px;
+	color: white;
+}
+
 .form-inline {
 	text-align: center;
 }
 
+#movies-page {
+	text-align: center;
+	width: 75px;
+}
+
+.movie {
+	width: 250px;
+	height: 375px;
+	margin-bottom: 25px;
+}
+
 .cover {
-	width: 275px;
-	height: auto;
+	width: 100%;
+	height: 325px;
+}
+
+.title {
+	width: 250px;
+	height: 50px;
+	background-color: #E6341B; 
+	padding: 10px;
+	text-align: center;
+	text-overflow: ellipsis;
+}
+
+.title p {
+	width: 100%;
+	font-weight: bold;
+	font-size: 1.2em;
+
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
 #pages li.selected,
 #pages li:hover {
-	background-color: #EEEEEE;
+	background-color: rgba(0, 0, 0, 0.4);
 	cursor: pointer;
 }
 
 #pages li {
-	display: inline;
+	display: inline-block;
 	padding: 2px;
-	background-color: #BBBBBB;
+	width: 50px;
+	height: 50px;
+	line-height: 50px;
+	font-size: 1.3em;
+}
+
+#pages li a {
+	color: white;
 }
 
 #pages {
@@ -34,16 +97,31 @@ a:hover {
 
 #nav-pages {
 	text-align: center;
+	background-color: rgba(0, 0, 0, 0.2);
+	height: 100px;
+	line-height: 50px;
+	width: 100%;
+	position: fixed;
+	left: 0;
+	bottom: 0;
+}
+
+.nav-panel {
+	display: inline-block;
+	width: 65px;
 }
 
 .movie {
 	display: inline-block;
 	margin-right: 10px;
 	margin-left: 10px;
-	margin-bottom: 15px;
-	text-align: center;
 }
 
 .hidden {
 	display: none;
+}
+
+.page-split:hover,
+.nav-arrow:hover {
+	color: white;
 }

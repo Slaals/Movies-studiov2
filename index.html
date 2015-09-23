@@ -22,10 +22,11 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="./js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="./js/json2html.js" type="text/javascript"></script>
     <script src="./js/function.js" type="text/javascript"></script>
   </head>
   <body>
-    <div class="container">
+    <div id="header" class="container-fluid">
       <div class="form-inline">
         <div class="form-group">
           <label for="movies-page">Movies by page </label>
@@ -33,17 +34,31 @@
         </div>
       </div>
     </div>
-    <div class="container" id="movies-view">
-
+    <div class="container-fluid" id="main">
+      <div class="container" id="movies-view">
+        
+      </div>
     </div>
-    <div class="container">
+    <div class="container-fluid" id="nav-pages">
       <div id="nav-pages">
-        <a id="page-prev" class="nav-arrow">&lt;</a>
-        <a id="page-split-left" class="page-split hidden">...</a>
+        <div class="nav-panel">
+          <a id="page-split-left" class="page-split hidden">
+            <span class="glyphicon glyphicon-triangle-left"></span>
+          </a>
+          <a id="page-prev" class="nav-arrow">
+            <span class="glyphicon glyphicon-chevron-left"></span>
+          </a>
+        </div>
         <ul id="pages">
         </ul>
-        <a id="page-split-right" class="page-split hidden">...</a>
-        <a id="page-next" class="nav-arrow">&gt;</a>
+        <div class="nav-panel">
+          <a id="page-next" class="nav-arrow">
+            <span class="glyphicon glyphicon-chevron-right"></span>
+          </a>
+          <a id="page-split-right" class="page-split hidden">
+            <span class="glyphicon glyphicon-triangle-right"></span>
+          </a>
+        </div>
       </div>
     </div>
   </body>
