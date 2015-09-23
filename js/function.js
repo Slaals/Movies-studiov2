@@ -154,7 +154,7 @@ function updateMoviesView( index ) {
 
 	container.empty();
 
-	// Avoid array often in for loop below
+	// Avoid array offset in for loop below
 	if( to > movies.length ) {
 		to -= to - movies.length;
 	}
