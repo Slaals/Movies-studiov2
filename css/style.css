@@ -20,12 +20,16 @@ body {
 	width: 75px;
 }
 
-.movie {
+.movie,
+.stub {
 	width: 250px;
 	height: 375px;
+	display: inline-block;
+	margin-right: 10px;
+	margin-left: 10px;
 	margin-bottom: 25px;
+	vertical-align: top;
 }
-
 .cover {
 	width: 100%;
 	height: 325px;
@@ -48,12 +52,6 @@ body {
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
-}
-
-.movie {
-	display: inline-block;
-	margin-right: 10px;
-	margin-left: 10px;
 }
 
 .hidden {
