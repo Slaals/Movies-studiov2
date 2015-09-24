@@ -1,17 +1,13 @@
-const NB_ELEMENT = 10;
+const NB_ELEMENT_STUB = 10; // Number of elements stubbed when needed
 const PER_PAGE = 10;
+const SCREEN_LIMIT = 1;
 
 var page = 1;
 
-var nbElementsDisplayed = 0;
-
-var firstElementsStubbed = [];
-var lastElementsStubbed = [];
+var topElementsStubbed = [];
+var bottomElementsStubbed = [];
 
 var scrollMovement = false;
-
-// TODO gérer avec le scroll ( delete en avant ou en arrière ... ) => STUB en utilisant la classe movie
-// http://engineering.linkedin.com/linkedin-ipad-5-techniques-smooth-infinite-scrolling-html5
 
 /*
  * <div class="movie">
@@ -32,6 +28,7 @@ $( document ).ready( function() {
 	getDataPage( );
 
 	$( window ).scroll( function() {
+		// Retrieve movies and diplay them
 		if( $( window ).height() + $( window ).scrollTop() == $( document ).height() ) {
 			getDataPage();
 		} 
@@ -39,6 +36,7 @@ $( document ).ready( function() {
 		scrollMovement = true;
 	});
 
+	// Update movies when the scroll just mover every 1 second
 	setInterval( function( ) {
 		if( scrollMovement ) {
 			updateMovies();
@@ -50,45 +48,56 @@ $( document ).ready( function() {
 function updateMovies( ) {
 	var topNode = $( '#movies-view' ).children( '.movie' ).first();
 	var bottomNode = $( '#movies-view' ).children( '.movie' ).last();
-	var limitDisplayTop = $( window ).scrollTop() - $( window ).height();
-	var limitDisplayBottom = $( window ).scrollTop() + $( window ).height() * 1.5;
+	var limitDisplayTop = $( window ).scrollTop() - $( window ).height() * SCREEN_LIMIT;
+	var limitDisplayBottom = $( window ).scrollTop() + $( window ).height() * ( SCREEN_LIMIT + 0.5 ); // +0.5 is useful for tests; but has to be deleted otherwise
 
+	// Stub the top list and generate the bottom list
 	if( topNode.offset().top < limitDisplayTop ) {
-		for( i = 0; i < NB_ELEMENT; i++) {
-			var node = $( '#movies-view' ).children( '.movie' ).first();
-			firstElementsStubbed.push( node.clone() );
-			node.replaceWith( "<div class='first stub'></div>" );
+		for( i = 0; i < NB_ELEMENT_STUB; i++) {
+			$( '#movies-view' ).children( '.movie' ).first().stubBackward();
 		}
 
-		var firstElement = lastElementsStubbed.length - 1;
-		for( i = firstElement; i >= lastElementsStubbed.length - NB_ELEMENT; i-- ) {
-			var node = $( '#movies-view' ).children( '.last.stub' ).first();
-			node.replaceWith( lastElementsStubbed[i] );
-
-			delete lastElementsStubbed[i];
-			nbElementsDisplayed += 1;
+		var firstElement = bottomElementsStubbed.length - 1;
+		for( i = firstElement; i >= bottomElementsStubbed.length - NB_ELEMENT_STUB; i-- ) {
+			$( '#movies-view' ).children( '.bottom.stub' ).first().generateForward( i );
 		}
 	} 
 
+	// Stub the bottom list and generate the top list
 	if( bottomNode.offset().top > limitDisplayBottom ) {
-		var node;
-		for( i = 0; i < NB_ELEMENT; i++) {
-			node = $( '#movies-view' ).children( '.movie' ).last();
-			lastElementsStubbed.push( node.clone() );
-			node.replaceWith( "<div class='last stub'></div>" );
+		for( i = 0; i < NB_ELEMENT_STUB; i++) {
+			$( '#movies-view' ).children( '.movie' ).last().stubForward();
 		}
 
-		var firstElement = firstElementsStubbed.length - 1;
-		for( i = firstElement; i >= firstElement - NB_ELEMENT; i-- ) {
-			var node = $( '#movies-view' ).children( '.first.stub' ).last();
-			node.replaceWith( firstElementsStubbed[i] );
-
-			delete firstElementsStubbed[i];
-			nbElementsDisplayed += 1;
+		var firstElement = topElementsStubbed.length - 1;
+		for( i = firstElement; i >= firstElement - NB_ELEMENT_STUB; i-- ) {
+			$( '#movies-view' ).children( '.top.stub' ).last().generateBackward( i );
 		}
 
 	} 
 
+}
+
+$.fn.generateBackward = function( index ) {
+	$( this ).replaceWith( topElementsStubbed[index] );
+
+	delete topElementsStubbed[index];
+}
+
+$.fn.generateForward = function( index ) {
+	$( this ).replaceWith( bottomElementsStubbed[index] );
+
+	delete bottomElementsStubbed[index];
+}
+
+$.fn.stubForward = function() {
+	bottomElementsStubbed.push( $( this ).clone() );
+	$( this ).replaceWith( "<div class='bottom stub'></div>" );
+}
+
+$.fn.stubBackward = function() {
+	topElementsStubbed.push( $( this ).clone() );
+	$( this ).replaceWith( "<div class='top stub'></div>" );
 }
 
 function getDataPage( ) {
@@ -102,12 +111,7 @@ function getDataPage( ) {
 
 			for( i = 0; i < movies.length; i++ ) {
 				$( '#movies-view' ).append( json2html.transform( movies[i], transform ) );
-				nbElementsDisplayed += 1;
 			}
 		} 
 	});
-}
-
-$.fn.stub = function( classes ) {
-	$( this ).replaceWith( '<div class="' + classes + '"></div>' );
 }
