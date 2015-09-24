@@ -1,5 +1,4 @@
 const NB_ELEMENT_STUB = 10; // Number of elements stubbed when needed
-const PER_PAGE = 10;
 const SCREEN_LIMIT = 1;
 
 var page = 1;
@@ -101,7 +100,7 @@ $.fn.stubBackward = function() {
 }
 
 function getDataPage( ) {
-	var res = "https://dev-api.streamnation.com/api/v1/movies?with_facets=false&page=" + page + "&sort_by=new_content&order=desc&watched=false&currently_playing_first=true&per_page=" + PER_PAGE +"&cover=low&fields=[%22name%22%2c%22cover%22]&x_api_version=2.0&auth_token=ap84WKgZ5rgy8Dmkamwe";
+	var res = "https://dev-api.streamnation.com/api/v1/movies?with_facets=false&page=" + page + "&sort_by=new_content&order=desc&watched=false&currently_playing_first=true&per_page=10&cover=low&fields=[%22name%22%2c%22cover%22]&x_api_version=2.0&auth_token=ap84WKgZ5rgy8Dmkamwe";
 
 	$.getJSON( res, function( data ) {
 		if( data.movies.length > 0 ) { // Page isn't full so it's considered to be the end
